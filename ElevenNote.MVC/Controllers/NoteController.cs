@@ -103,7 +103,21 @@ namespace ElevenNote.MVC.Controllers
             return View(model);
         }
 
-        private NoteService NewMethod()
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePost(int id)
+        {
+            var service = CreateNoteService();
+
+            service.DeleteNote(id);
+
+            TempData["SaveResult"] = "Your note was deleted";
+
+            return RedirectToAction("Index");
+        }
+
+        private NoteService CreateNoteService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
             var service = new NoteService(userId);
